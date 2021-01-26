@@ -40,7 +40,7 @@ static int xferinfo(void *p, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ul
 static int older_progress(void *p, double dltotal, double dlnow, double ultotal, double ulnow);
 #endif
 
-chttp_response *chttp_fetch(char *url, char *postData, chttpmethod method, long ignoreHeaders) {
+chttp_response *chttp_fetch(char *url, char *postData, chttp_method method, long ignoreHeaders) {
     CURL *curl;
     CURLcode res;
 
@@ -76,7 +76,7 @@ chttp_response *chttp_fetch(char *url, char *postData, chttpmethod method, long 
 }
 
 int
-chttp_download(char *url, char *data, chttpmethod method, char *filename, curl_off_t *current, curl_off_t *total,
+chttp_download(char *url, char *data, chttp_method method, char *filename, curl_off_t *current, curl_off_t *total,
                volatile uint8_t *cancellation) {
     CURL *curl;
     FILE *pagefile;
