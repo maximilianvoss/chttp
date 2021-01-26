@@ -30,7 +30,7 @@ struct state_s {
     volatile uint8_t *cancellation;
 };
 
-static size_t writeDataToString(void *ptr, size_t size, size_t nmemb, http_response_t *data);
+static size_t writeDataToString(void *ptr, size_t size, size_t nmemb, chttp_response *data);
 
 static size_t writeDataToFile(void *ptr, size_t size, size_t nmemb, void *stream);
 
@@ -40,13 +40,13 @@ static int xferinfo(void *p, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ul
 static int older_progress(void *p, double dltotal, double dlnow, double ultotal, double ulnow);
 #endif
 
-http_response_t *http_fetch(char *url, char *postData, httpmethod_t method, long throwHeaderOut) {
+chttp_response *chttp_fetch(char *url, char *postData, chttpmethod method, long ignoreHeaders) {
     CURL *curl;
     CURLcode res;
 
     LOG_DEBUG("Fetching: %s", url);
 
-    http_response_t *curlResponse = calloc(1, sizeof(http_response_t));
+    chttp_response *curlResponse = calloc(1, sizeof(chttp_response));
     curlResponse->size = 0;
     curlResponse->data = calloc(16386, sizeof(char));
 
@@ -61,7 +61,7 @@ http_response_t *http_fetch(char *url, char *postData, httpmethod_t method, long
         curl_easy_setopt(curl, CURLOPT_URL, url);
         curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeDataToString);
-        curl_easy_setopt(curl, CURLOPT_HEADER, throwHeaderOut);
+        curl_easy_setopt(curl, CURLOPT_HEADER, ignoreHeaders);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, curlResponse);
         if (method == POST) {
             curl_easy_setopt(curl, CURLOPT_POSTFIELDS, postData);
@@ -76,8 +76,8 @@ http_response_t *http_fetch(char *url, char *postData, httpmethod_t method, long
 }
 
 int
-http_download(char *url, char *data, httpmethod_t method, char *filename, curl_off_t *current, curl_off_t *total,
-              volatile uint8_t *cancellation) {
+chttp_download(char *url, char *data, chttpmethod method, char *filename, curl_off_t *current, curl_off_t *total,
+               volatile uint8_t *cancellation) {
     CURL *curl;
     FILE *pagefile;
     CURLcode res = CURLE_OK;
@@ -128,7 +128,7 @@ http_download(char *url, char *data, httpmethod_t method, char *filename, curl_o
     return res;
 }
 
-void http_freeResponse(http_response_t *response) {
+void chttp_free(chttp_response *response) {
     if (response == NULL) {
         return;
     }
@@ -154,7 +154,7 @@ static size_t writeDataToFile(void *ptr, size_t size, size_t nmemb, void *stream
     return written;
 }
 
-static size_t writeDataToString(void *ptr, size_t size, size_t nmemb, http_response_t *data) {
+static size_t writeDataToString(void *ptr, size_t size, size_t nmemb, chttp_response *data) {
     size_t index = data->size;
     size_t n = (size * nmemb);
     char *tmp;

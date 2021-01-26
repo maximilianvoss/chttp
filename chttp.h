@@ -23,20 +23,20 @@
 typedef enum {
     GET,
     POST
-} httpmethod_t;
+} chttpmethod;
 
 // Definition of a http response
-typedef struct http_response_s {
+typedef struct chttp_response_s {
     size_t size;
     char *data;
-} http_response_t;
+} chttp_response;
 
 // http methoods
-int http_download(char *url, char *data, httpmethod_t method, char *filename, curl_off_t *current, curl_off_t *total,
-                  volatile uint8_t *cancellation);
+int chttp_download(char *url, char *data, chttpmethod method, char *filename, curl_off_t *current, curl_off_t *total,
+                   volatile uint8_t *cancellation);
 
-http_response_t *http_fetch(char *url, char *postData, httpmethod_t method, long ignoreHeaders);
+chttp_response *chttp_fetch(char *url, char *postData, chttpmethod method, long ignoreHeaders);
 
-void http_freeResponse(http_response_t *response);
+void chttp_free(chttp_response *response);
 
 #endif
