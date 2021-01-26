@@ -18,6 +18,7 @@
 #define _CHTTP_H
 
 #include <stdint.h>
+#include <curl/curl.h>
 
 // HTTP Method Enum
 typedef enum {
