@@ -40,4 +40,10 @@ chttp_response *chttp_fetch(char *url, char *postData, chttp_method method, long
 
 void chttp_free(chttp_response *response);
 
+char *chttp_escapeURL(char *url);
+
+char *chttp_unescapeURL(char *url);
+
+void chttp_freeURL(char *url);
+
 #endif

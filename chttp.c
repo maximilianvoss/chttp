@@ -136,6 +136,34 @@ void chttp_free(chttp_response *response) {
     FREENOTNULL(response);
 }
 
+char *chttp_escapeURL(char *url) {
+    if (url == NULL) {
+        return NULL;
+    }
+
+    CURL *curl = curl_easy_init();
+    if (curl) {
+        return curl_easy_escape(curl, url, 0);
+    }
+    return NULL;
+}
+
+char *chttp_unescapeURL(char *url) {
+    if (url == NULL) {
+        return NULL;
+    }
+
+    CURL *curl = curl_easy_init();
+    if (curl) {
+        return curl_easy_unescape(curl, url, 0, NULL);
+    }
+    return NULL;
+}
+
+void chttp_freeURL(char *url) {
+    curl_free(url);
+}
+
 static int xferinfo(void *p, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal, curl_off_t ulnow) {
     struct state_s *state = (struct state_s *) p;
     *state->current = dlnow;
