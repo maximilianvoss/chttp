@@ -40,7 +40,7 @@ if (NOT TARGET chttp)
     target_link_libraries(chttp ${OPENSSL_LIBRARIES} ${CURL_LIBRARIES})
 
     # Install
-    install(TARGETS chttp DESTINATION libs)
+    install(TARGETS chttp DESTINATION lib)
     install(FILES chttp.h DESTINATION include)
 endif ()
 
