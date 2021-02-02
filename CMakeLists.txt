@@ -2,14 +2,14 @@ cmake_minimum_required(VERSION 3.0)
 project(chttp C)
 
 set(CMAKE_C_STANDARD 99)
-set(CMAKE_INSTALL_PREFIX /usr)
-set(THREADS_PREFER_PTHREAD_FLAG on)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH true)
 
 # required packages
 find_package(CURL REQUIRED)
 find_package(Threads REQUIRED)
 find_package(OpenSSL REQUIRED)
+find_package(CLOGGER REQUIRED)
 
 # debug handling for build
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
@@ -25,7 +25,7 @@ set(INCLUDE_DIRECTORIES
         ${INCLUDE_DIRECTORIES}
         ${CURL_INCLUDE_DIRS}
         ${OPENSSL_INCLUDE_DIR}
-        libs/clogger
+        ${CLOGGER_INCLUDE_DIR}
         )
 include_directories(${INCLUDE_DIRECTORIES})
 
