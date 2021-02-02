@@ -41,5 +41,6 @@ if (NOT TARGET chttp)
 
     # Install
     install(TARGETS chttp DESTINATION libs)
+    install(FILES chttp.h DESTINATION include)
 endif ()
 
