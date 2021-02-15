@@ -20,6 +20,10 @@ else ()
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -O3")
 endif ()
 
+if (NOT nofpic)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -O3 -fPIC")
+endif ()
+
 # Header file directories
 set(INCLUDE_DIRECTORIES
         ${INCLUDE_DIRECTORIES}
