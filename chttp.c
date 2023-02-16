@@ -75,7 +75,8 @@ chttp_response *chttp_fetch(char *url, struct curl_slist *headers, char *postDat
 }
 
 int
-chttp_download(char *url, char *data, chttp_method method, char *filename, curl_off_t *current, curl_off_t *total,
+chttp_download(char *url, struct curl_slist *headers, char *data, chttp_method method, char *filename,
+               curl_off_t *current, curl_off_t *total,
                volatile uint8_t *cancellation) {
     CURL *curl;
     FILE *pagefile;
@@ -86,12 +87,11 @@ chttp_download(char *url, char *data, chttp_method method, char *filename, curl_
     curl_global_init(CURL_GLOBAL_ALL);
     curl = curl_easy_init();
     if (curl) {
-        struct curl_slist *chunk = NULL;
-        chunk = curl_slist_append(chunk,
-                                  "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36");
+        headers = curl_slist_append(headers,
+                                    "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36");
 
         curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
-        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, chunk);
+        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
         curl_easy_setopt(curl, CURLOPT_URL, url);
         curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
         curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);

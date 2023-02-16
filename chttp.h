@@ -33,7 +33,8 @@ typedef struct chttp_response_s {
 } chttp_response;
 
 // http methoods
-int chttp_download(char *url, char *data, chttp_method method, char *filename, curl_off_t *current, curl_off_t *total,
+int chttp_download(char *url, struct curl_slist *headers, char *data, chttp_method method, char *filename,
+                   curl_off_t *current, curl_off_t *total,
                    volatile uint8_t *cancellation);
 
 chttp_response *
