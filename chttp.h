@@ -36,7 +36,8 @@ typedef struct chttp_response_s {
 int chttp_download(char *url, char *data, chttp_method method, char *filename, curl_off_t *current, curl_off_t *total,
                    volatile uint8_t *cancellation);
 
-chttp_response *chttp_fetch(char *url, char *postData, chttp_method method, long ignoreHeaders);
+chttp_response *
+chttp_fetch(char *url, struct curl_slist *headers, char *postData, chttp_method method, long ignoreHeaders);
 
 void chttp_free(chttp_response *response);
 

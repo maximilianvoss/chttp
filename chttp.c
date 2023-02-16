@@ -40,7 +40,7 @@ static int xferinfo(void *p, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ul
 static int older_progress(void *p, double dltotal, double dlnow, double ultotal, double ulnow);
 #endif
 
-chttp_response *chttp_fetch(char *url, char *postData, chttp_method method, long ignoreHeaders) {
+chttp_response *chttp_fetch(char *url, struct curl_slist *headers, char *postData, chttp_method method, long ignoreHeaders) {
     CURL *curl;
     CURLcode res;
 
@@ -52,12 +52,11 @@ chttp_response *chttp_fetch(char *url, char *postData, chttp_method method, long
 
     curl = curl_easy_init();
     if (curl) {
-        struct curl_slist *chunk = NULL;
-        chunk = curl_slist_append(chunk,
+        headers = curl_slist_append(headers,
                                   "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36");
 
         curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
-        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, chunk);
+        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
         curl_easy_setopt(curl, CURLOPT_URL, url);
         curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeDataToString);
