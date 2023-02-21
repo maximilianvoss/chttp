@@ -74,6 +74,35 @@ chttp_response *chttp_fetch(char *url, struct curl_slist *headers, char *postDat
     return curlResponse;
 }
 
+chttp_response *chttp_head(char *url, struct curl_slist *headers) {
+    CURL *curl;
+    CURLcode res;
+
+    LOG_DEBUG("Head: %s", url);
+
+    chttp_response *curlResponse = calloc(1, sizeof(chttp_response));
+    curlResponse->size = 0;
+    curlResponse->data = calloc(16386, sizeof(char));
+
+    curl = curl_easy_init();
+    if (curl) {
+        headers = curl_slist_append(headers,
+                                    "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36");
+
+        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+        curl_easy_setopt(curl, CURLOPT_NOBODY, 1L);
+        curl_easy_setopt(curl, CURLOPT_URL, url);
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeDataToString);
+        curl_easy_setopt(curl, CURLOPT_HEADER, 1L);
+
+        res = curl_easy_perform(curl);
+        if (res != CURLE_OK) LOG_ERROR("curl_easy_perform() failed: %s", curl_easy_strerror(res));
+
+        curl_easy_cleanup(curl);
+    }
+    return curlResponse;
+}
+
 int
 chttp_download(char *url, struct curl_slist *headers, char *data, chttp_method method, char *filename,
                curl_off_t *current, curl_off_t *total,

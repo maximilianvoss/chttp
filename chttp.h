@@ -40,6 +40,8 @@ int chttp_download(char *url, struct curl_slist *headers, char *data, chttp_meth
 chttp_response *
 chttp_fetch(char *url, struct curl_slist *headers, char *postData, chttp_method method, long ignoreHeaders);
 
+chttp_response *chttp_head(char *url, struct curl_slist *headers);
+
 void chttp_free(chttp_response *response);
 
 char *chttp_escapeURL(char *url);
