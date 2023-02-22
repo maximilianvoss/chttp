@@ -94,6 +94,7 @@ chttp_response *chttp_head(char *url, struct curl_slist *headers) {
         curl_easy_setopt(curl, CURLOPT_URL, url);
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeDataToString);
         curl_easy_setopt(curl, CURLOPT_HEADER, 1L);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, curlResponse);
 
         res = curl_easy_perform(curl);
         if (res != CURLE_OK) LOG_ERROR("curl_easy_perform() failed: %s", curl_easy_strerror(res));
